@@ -1,0 +1,562 @@
+[
+  {
+    "id": 1,
+    "sku": "PS-FOOD-001",
+    "slug": "grain-free-salmon-cat-food-2kg",
+    "category": "food",
+    "petType": "cat",
+    "name": {
+      "tr": "Tahilsiz Somon Mama",
+      "en": "Grain-Free Salmon Food"
+    },
+    "shortDescription": {
+      "tr": "Yetiskin kediler icin 2 KG premium mama.",
+      "en": "2 KG premium food for adult cats."
+    },
+    "price": 549,
+    "compareAtPrice": 629,
+    "currency": "TRY",
+    "stock": 46,
+    "rating": 4.8,
+    "reviewCount": 214,
+    "badge": {
+      "tr": "Populer",
+      "en": "Popular"
+    },
+    "image": "/images/products/grain-free-salmon-cat-food.jpg",
+    "isPopular": true,
+    "isDeal": false
+  },
+  {
+    "id": 2,
+    "sku": "PS-ACC-002",
+    "slug": "smart-water-fountain-2-4l",
+    "category": "accessory",
+    "petType": "cat",
+    "name": {
+      "tr": "Akilli Su Pinari",
+      "en": "Smart Water Fountain"
+    },
+    "shortDescription": {
+      "tr": "2.4L otomatik filtreli su pinari.",
+      "en": "2.4L automatic filtered water fountain."
+    },
+    "price": 1290,
+    "compareAtPrice": 1490,
+    "currency": "TRY",
+    "stock": 19,
+    "rating": 4.7,
+    "reviewCount": 97,
+    "badge": {
+      "tr": "Yeni",
+      "en": "New"
+    },
+    "image": "/images/products/smart-water-fountain.jpg",
+    "isPopular": true,
+    "isDeal": true
+  },
+  {
+    "id": 3,
+    "sku": "PS-BED-003",
+    "slug": "orthopedic-dog-bed-m",
+    "category": "bed",
+    "petType": "dog",
+    "name": {
+      "tr": "Ortopedik Kopek Yatagi",
+      "en": "Orthopedic Dog Bed"
+    },
+    "shortDescription": {
+      "tr": "Orta irklar icin M beden konfor yatagi.",
+      "en": "Comfort bed, size M for medium breeds."
+    },
+    "price": 899,
+    "compareAtPrice": 999,
+    "currency": "TRY",
+    "stock": 31,
+    "rating": 4.9,
+    "reviewCount": 168,
+    "badge": {
+      "tr": "Cok Satan",
+      "en": "Best Seller"
+    },
+    "image": "/images/products/orthopedic-dog-bed.jpg",
+    "isPopular": true,
+    "isDeal": false
+  },
+  {
+    "id": 4,
+    "sku": "PS-TOY-004",
+    "slug": "cat-tunnel-toy-foldable",
+    "category": "toy",
+    "petType": "cat",
+    "name": {
+      "tr": "Kedi Oyuncak Tuneli",
+      "en": "Cat Tunnel Toy"
+    },
+    "shortDescription": {
+      "tr": "Katilabilir, dayanikli kumas tuncel.",
+      "en": "Foldable tunnel with durable fabric."
+    },
+    "price": 399,
+    "compareAtPrice": 459,
+    "currency": "TRY",
+    "stock": 58,
+    "rating": 4.6,
+    "reviewCount": 83,
+    "badge": {
+      "tr": "Firsat",
+      "en": "Deal"
+    },
+    "image": "/images/products/cat-tunnel-toy.jpg",
+    "isPopular": false,
+    "isDeal": true
+  },
+  {
+    "id": 5,
+    "sku": "PS-HYG-005",
+    "slug": "natural-cat-litter-10l",
+    "category": "hygiene",
+    "petType": "cat",
+    "name": {
+      "tr": "DogaI Kedi Kumu 10L",
+      "en": "Natural Cat Litter 10L"
+    },
+    "shortDescription": {
+      "tr": "Topaklanan lavanta kokulu 10L kedi kumu.",
+      "en": "Clumping lavender-scented litter, 10L."
+    },
+    "price": 319,
+    "compareAtPrice": 369,
+    "currency": "TRY",
+    "stock": 74,
+    "rating": 4.7,
+    "reviewCount": 205,
+    "badge": {
+      "tr": "Populer",
+      "en": "Popular"
+    },
+    "image": "/images/products/natural-cat-litter.jpg",
+    "isPopular": true,
+    "isDeal": false
+  },
+  {
+    "id": 6,
+    "sku": "PS-HAB-006",
+    "slug": "rodent-starter-kit-deluxe",
+    "category": "habitat",
+    "petType": "rodent",
+    "name": {
+      "tr": "Kemirgen Baslangic Seti",
+      "en": "Rodent Starter Kit"
+    },
+    "shortDescription": {
+      "tr": "Kafes aksesuarlari ile tam baslangic paketi.",
+      "en": "Full starter package with cage accessories."
+    },
+    "price": 1490,
+    "compareAtPrice": 1690,
+    "currency": "TRY",
+    "stock": 12,
+    "rating": 4.5,
+    "reviewCount": 61,
+    "badge": {
+      "tr": "Yeni",
+      "en": "New"
+    },
+    "image": "/images/products/rodent-starter-kit.jpg",
+    "isPopular": false,
+    "isDeal": false
+  },
+  {
+    "id": 7,
+    "sku": "PS-ACC-007",
+    "slug": "adjustable-dog-collar-reflective-m",
+    "category": "accessory",
+    "petType": "dog",
+    "name": {
+      "tr": "Ayarlanabilir Kopek Tasmassi",
+      "en": "Adjustable Dog Collar"
+    },
+    "shortDescription": {
+      "tr": "Reflektor seritli, M beden kopek tasmasi.",
+      "en": "Reflective stripe dog collar, size M."
+    },
+    "price": 289,
+    "compareAtPrice": 339,
+    "currency": "TRY",
+    "stock": 53,
+    "rating": 4.6,
+    "reviewCount": 115,
+    "badge": {
+      "tr": "Populer",
+      "en": "Popular"
+    },
+    "image": "/images/products/adjustable-dog-collar.jpg",
+    "isPopular": true,
+    "isDeal": false
+  },
+  {
+    "id": 8,
+    "sku": "PS-TOY-008",
+    "slug": "cat-scratching-tower-multi-level",
+    "category": "toy",
+    "petType": "cat",
+    "name": {
+      "tr": "Kedi Tirmalama Diregi",
+      "en": "Cat Scratching Tower"
+    },
+    "shortDescription": {
+      "tr": "Cok katli sisal ip kaplamali tirmalama diregi.",
+      "en": "Multi-level scratching tower with sisal rope."
+    },
+    "price": 1150,
+    "compareAtPrice": 1290,
+    "currency": "TRY",
+    "stock": 22,
+    "rating": 4.8,
+    "reviewCount": 143,
+    "badge": {
+      "tr": "Cok Satan",
+      "en": "Best Seller"
+    },
+    "image": "/images/products/cat-scratching-tower.jpg",
+    "isPopular": true,
+    "isDeal": false
+  },
+  {
+    "id": 9,
+    "sku": "PS-FOOD-009",
+    "slug": "vitamin-dog-treats-salmon-500gr",
+    "category": "food",
+    "petType": "dog",
+    "name": {
+      "tr": "Vitamin Destekli Kopek Odulu",
+      "en": "Vitamin Dog Treats"
+    },
+    "shortDescription": {
+      "tr": "Somonlu yumusak odul mamasii 500 gr.",
+      "en": "Soft salmon dog treats, 500 gr."
+    },
+    "price": 219,
+    "compareAtPrice": 269,
+    "currency": "TRY",
+    "stock": 84,
+    "rating": 4.4,
+    "reviewCount": 72,
+    "badge": {
+      "tr": "Firsat",
+      "en": "Deal"
+    },
+    "image": "/images/products/vitamin-dog-treats.jpg",
+    "isPopular": false,
+    "isDeal": true
+  },
+  {
+    "id": 10,
+    "sku": "PS-ACC-010",
+    "slug": "deluxe-pet-carrier-bag-foldable",
+    "category": "accessory",
+    "petType": "cat",
+    "name": {
+      "tr": "Tasimma Cantasi Deluxe",
+      "en": "Deluxe Carrier Bag"
+    },
+    "shortDescription": {
+      "tr": "Nefes alan fileli, katlanabilir tasima cantasi.",
+      "en": "Foldable carrier bag with breathable mesh."
+    },
+    "price": 1790,
+    "compareAtPrice": 1990,
+    "currency": "TRY",
+    "stock": 14,
+    "rating": 4.7,
+    "reviewCount": 64,
+    "badge": {
+      "tr": "Yeni",
+      "en": "New"
+    },
+    "image": "/images/products/deluxe-carrier-bag.jpg",
+    "isPopular": true,
+    "isDeal": false
+  },
+  {
+    "id": 11,
+    "sku": "PS-GRM-011",
+    "slug": "self-cleaning-brush-medium",
+    "category": "grooming",
+    "petType": "dog",
+    "name": {
+      "tr": "Kendinden Temizlenen Firca",
+      "en": "Self-Cleaning Brush"
+    },
+    "shortDescription": {
+      "tr": "Orta ve uzun tuyler icin kolay temizlenen firca.",
+      "en": "Easy-clean brush for medium/long coats."
+    },
+    "price": 259,
+    "compareAtPrice": 299,
+    "currency": "TRY",
+    "stock": 67,
+    "rating": 4.5,
+    "reviewCount": 88,
+    "badge": {
+      "tr": "Populer",
+      "en": "Popular"
+    },
+    "image": "/images/products/self-cleaning-brush.jpg",
+    "isPopular": false,
+    "isDeal": false
+  },
+  {
+    "id": 12,
+    "sku": "PS-FOOD-012",
+    "slug": "puppy-lamb-rice-food-3kg",
+    "category": "food",
+    "petType": "dog",
+    "name": {
+      "tr": "Yavru Kopek Kuzu Pirinc Mamasii",
+      "en": "Puppy Lamb and Rice Food"
+    },
+    "shortDescription": {
+      "tr": "Yavru kopekler icin kuzu etli 3 KG mama.",
+      "en": "3 KG lamb and rice food for puppies."
+    },
+    "price": 679,
+    "compareAtPrice": 739,
+    "currency": "TRY",
+    "stock": 39,
+    "rating": 4.8,
+    "reviewCount": 121,
+    "badge": {
+      "tr": "Cok Satan",
+      "en": "Best Seller"
+    },
+    "image": "/images/products/puppy-lamb-rice-food.jpg",
+    "isPopular": true,
+    "isDeal": false
+  },
+  {
+    "id": 13,
+    "sku": "PS-TOY-013",
+    "slug": "interactive-laser-toy-rechargeable",
+    "category": "toy",
+    "petType": "cat",
+    "name": {
+      "tr": "Interaktif Lazer Oyuncak",
+      "en": "Interactive Laser Toy"
+    },
+    "shortDescription": {
+      "tr": "USB sarjli, otomatik hareket eden lazer oyuncak.",
+      "en": "USB rechargeable automatic moving laser toy."
+    },
+    "price": 449,
+    "compareAtPrice": 529,
+    "currency": "TRY",
+    "stock": 27,
+    "rating": 4.3,
+    "reviewCount": 49,
+    "badge": {
+      "tr": "Yeni",
+      "en": "New"
+    },
+    "image": "/images/products/interactive-laser-toy.jpg",
+    "isPopular": false,
+    "isDeal": true
+  },
+  {
+    "id": 14,
+    "sku": "PS-HYG-014",
+    "slug": "odor-control-litter-mat-xl",
+    "category": "hygiene",
+    "petType": "cat",
+    "name": {
+      "tr": "Koku Kontrol Kedi Kumu Paspasi",
+      "en": "Odor-Control Litter Mat"
+    },
+    "shortDescription": {
+      "tr": "XL ebat, kum dagilimini azaltan paspas.",
+      "en": "XL mat that reduces litter spread."
+    },
+    "price": 339,
+    "compareAtPrice": 399,
+    "currency": "TRY",
+    "stock": 41,
+    "rating": 4.4,
+    "reviewCount": 57,
+    "badge": {
+      "tr": "Firsat",
+      "en": "Deal"
+    },
+    "image": "/images/products/odor-control-litter-mat.jpg",
+    "isPopular": false,
+    "isDeal": true
+  },
+  {
+    "id": 15,
+    "sku": "PS-ACC-015",
+    "slug": "double-bowl-feeding-station",
+    "category": "accessory",
+    "petType": "dog",
+    "name": {
+      "tr": "Ikili Mama Su Kabii Seti",
+      "en": "Double Bowl Feeding Station"
+    },
+    "shortDescription": {
+      "tr": "Kaymaz tabanli ikili mama ve su kabi.",
+      "en": "Non-slip feeding station with dual bowls."
+    },
+    "price": 429,
+    "compareAtPrice": 489,
+    "currency": "TRY",
+    "stock": 35,
+    "rating": 4.6,
+    "reviewCount": 66,
+    "badge": {
+      "tr": "Populer",
+      "en": "Popular"
+    },
+    "image": "/images/products/double-bowl-feeding-station.jpg",
+    "isPopular": true,
+    "isDeal": false
+  },
+  {
+    "id": 16,
+    "sku": "PS-HAB-016",
+    "slug": "bird-cage-essential-kit",
+    "category": "habitat",
+    "petType": "bird",
+    "name": {
+      "tr": "Kus Kafesi Essential Set",
+      "en": "Bird Cage Essential Kit"
+    },
+    "shortDescription": {
+      "tr": "Yemlik, suluk ve tunekli kus kafesi seti.",
+      "en": "Bird cage set with feeder, drinker and perch."
+    },
+    "price": 1390,
+    "compareAtPrice": 1590,
+    "currency": "TRY",
+    "stock": 16,
+    "rating": 4.5,
+    "reviewCount": 38,
+    "badge": {
+      "tr": "Yeni",
+      "en": "New"
+    },
+    "image": "/images/products/bird-cage-essential-kit.jpg",
+    "isPopular": false,
+    "isDeal": false
+  },
+  {
+    "id": 17,
+    "sku": "PS-GRM-017",
+    "slug": "paw-care-balm-50ml",
+    "category": "grooming",
+    "petType": "dog",
+    "name": {
+      "tr": "Pati Bakim Balsami 50ml",
+      "en": "Paw Care Balm 50ml"
+    },
+    "shortDescription": {
+      "tr": "Kuru pati yastiklari icin nemlendirici balm.",
+      "en": "Moisturizing balm for dry paw pads."
+    },
+    "price": 199,
+    "compareAtPrice": 239,
+    "currency": "TRY",
+    "stock": 92,
+    "rating": 4.7,
+    "reviewCount": 103,
+    "badge": {
+      "tr": "Populer",
+      "en": "Popular"
+    },
+    "image": "/images/products/paw-care-balm.jpg",
+    "isPopular": false,
+    "isDeal": false
+  },
+  {
+    "id": 18,
+    "sku": "PS-TOY-018",
+    "slug": "durable-rubber-chew-bone",
+    "category": "toy",
+    "petType": "dog",
+    "name": {
+      "tr": "Dayanikli Kauckuk Kemik Oyuncak",
+      "en": "Durable Rubber Chew Bone"
+    },
+    "shortDescription": {
+      "tr": "Dis bakimini destekleyen cigneme oyuncagi.",
+      "en": "Chew toy that supports dental hygiene."
+    },
+    "price": 179,
+    "compareAtPrice": 219,
+    "currency": "TRY",
+    "stock": 110,
+    "rating": 4.4,
+    "reviewCount": 74,
+    "badge": {
+      "tr": "Firsat",
+      "en": "Deal"
+    },
+    "image": "/images/products/durable-rubber-chew-bone.jpg",
+    "isPopular": false,
+    "isDeal": true
+  },
+  {
+    "id": 19,
+    "sku": "PS-FOOD-019",
+    "slug": "senior-cat-turkey-food-1-5kg",
+    "category": "food",
+    "petType": "cat",
+    "name": {
+      "tr": "Yasli Kedi Hindi Mamasii",
+      "en": "Senior Cat Turkey Food"
+    },
+    "shortDescription": {
+      "tr": "7+ yas kediler icin hindi etli 1.5 KG mama.",
+      "en": "1.5 KG turkey food for 7+ age cats."
+    },
+    "price": 489,
+    "compareAtPrice": 549,
+    "currency": "TRY",
+    "stock": 29,
+    "rating": 4.6,
+    "reviewCount": 52,
+    "badge": {
+      "tr": "Cok Satan",
+      "en": "Best Seller"
+    },
+    "image": "/images/products/senior-cat-turkey-food.jpg",
+    "isPopular": true,
+    "isDeal": false
+  },
+  {
+    "id": 20,
+    "sku": "PS-ACC-020",
+    "slug": "gps-tracker-pet-tag",
+    "category": "accessory",
+    "petType": "dog",
+    "name": {
+      "tr": "GPS Takipli Akilli Kunyye",
+      "en": "GPS Tracker Pet Tag"
+    },
+    "shortDescription": {
+      "tr": "Anlik konum takibi yapan akilli pet kunyye.",
+      "en": "Smart pet tag with real-time location tracking."
+    },
+    "price": 2290,
+    "compareAtPrice": 2490,
+    "currency": "TRY",
+    "stock": 9,
+    "rating": 4.5,
+    "reviewCount": 41,
+    "badge": {
+      "tr": "Yeni",
+      "en": "New"
+    },
+    "image": "/images/products/gps-tracker-pet-tag.jpg",
+    "isPopular": true,
+    "isDeal": false
+  }
+]
