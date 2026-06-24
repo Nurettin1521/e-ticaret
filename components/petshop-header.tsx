@@ -2,10 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useRouter } from "next/navigation";
 import type { Language } from "@/lib/i18n";
 import {
+  hydrateAuthUserFromSession,
   getAuthUserSnapshot,
   getServerAuthUserSnapshot,
+  logoutAuthUser,
   subscribeAuthUser,
 } from "@/lib/auth-client";
 import {
@@ -13,6 +16,7 @@ import {
   getCartItemCountForUser,
   getCartItemsSnapshotForUser,
   getServerCartCountSnapshot,
+  loadCartForUser,
   removeProductFromCart,
   subscribeCart,
 } from "@/lib/cart-client";
@@ -24,6 +28,8 @@ const content = {
     categories: "Kategoriler",
     deals: "Fırsat Ürünleri",
     profile: "Profil",
+    adminPanel: "Admin Panel",
+    logout: "Cikis Yap",
     language: "Dil",
     brand: "PatiShop",
     tagline: "Petshop",
@@ -33,6 +39,7 @@ const content = {
     close: "Kapat",
     empty: "Sepetin su an bos.",
     subtotal: "Ara Toplam",
+    placeOrder: "Siparis Ver",
     remove: "Kaldir",
     clear: "Sepeti Temizle",
     needLogin: "Sepetini gormek icin once giris yapmalisin.",
@@ -43,6 +50,8 @@ const content = {
     categories: "Categories",
     deals: "Deals",
     profile: "Profile",
+    adminPanel: "Admin Panel",
+    logout: "Logout",
     language: "Language",
     brand: "PatiShop",
     tagline: "Pet Shop",
@@ -52,6 +61,7 @@ const content = {
     close: "Close",
     empty: "Your cart is currently empty.",
     subtotal: "Subtotal",
+    placeOrder: "Place Order",
     remove: "Remove",
     clear: "Clear Cart",
     needLogin: "Please sign in to view your cart.",
@@ -66,6 +76,7 @@ type PetshopHeaderProps = {
   categoriesHref?: string;
   dealsHref?: string;
   loginHref?: string;
+  profileHref?: string;
 };
 
 export function PetshopHeader({
@@ -75,7 +86,9 @@ export function PetshopHeader({
   categoriesHref = "#categories",
   dealsHref = "#deals",
   loginHref = "/login",
+  profileHref,
 }: PetshopHeaderProps) {
+  const router = useRouter();
   const t = content[language];
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [productsById, setProductsById] = useState<Record<number, Product>>({});
@@ -84,6 +97,10 @@ export function PetshopHeader({
     getAuthUserSnapshot,
     getServerAuthUserSnapshot,
   );
+  const resolvedProfileHref =
+    authUser?.isAdmin ? `/admin?lang=${language}` : (profileHref ?? `/profile?lang=${language}`);
+  const profileLabel = authUser?.isAdmin ? t.adminPanel : t.profile;
+  const profileCartHref = `${resolvedProfileHref}${resolvedProfileHref.includes("?") ? "&" : "?"}tab=cart`;
   const cartItems = useSyncExternalStore(
     subscribeCart,
     () => getCartItemsSnapshotForUser(authUser?.email),
@@ -103,6 +120,15 @@ export function PetshopHeader({
       }),
     [language],
   );
+  useEffect(() => {
+    void hydrateAuthUserFromSession();
+  }, []);
+
+  useEffect(() => {
+    if (!authUser?.email) return;
+    void loadCartForUser(authUser.email);
+  }, [authUser?.email]);
+
   useEffect(() => {
     let cancelled = false;
 
@@ -158,13 +184,26 @@ export function PetshopHeader({
 
             <div className="order-2 ml-auto flex items-center gap-2 md:ml-0 md:order-3">
               {authUser ? (
-                <button
-                  type="button"
-                  disabled
-                  className="cursor-not-allowed rounded-full border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold text-zinc-500"
-                >
-                  {t.profile}
-                </button>
+                <>
+                  <Link
+                    href={resolvedProfileHref}
+                    className="rounded-full border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold text-zinc-700 transition-colors hover:border-emerald-400 hover:text-emerald-700"
+                  >
+                    {profileLabel}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      void (async () => {
+                        await logoutAuthUser();
+                        router.replace(`/?lang=${language}`);
+                      })();
+                    }}
+                    className="rounded-full border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold text-zinc-700 transition-colors hover:border-rose-300 hover:text-rose-700"
+                  >
+                    {t.logout}
+                  </button>
+                </>
               ) : (
                 <Link
                   href={loginHref}
@@ -215,13 +254,12 @@ export function PetshopHeader({
                 {t.deals}
               </a>
               {authUser ? (
-                <button
-                  type="button"
-                  disabled
-                  className="shrink-0 cursor-not-allowed rounded-full border border-zinc-200 px-3 py-1.5 text-zinc-400"
+                <Link
+                  href={resolvedProfileHref}
+                  className="shrink-0 rounded-full border border-zinc-200 px-3 py-1.5 text-zinc-600 transition-colors hover:border-emerald-400 hover:text-emerald-700"
                 >
-                  {t.profile}
-                </button>
+                  {profileLabel}
+                </Link>
               ) : null}
             </nav>
           </div>
@@ -277,7 +315,7 @@ export function PetshopHeader({
                         </div>
                         <button
                           type="button"
-                          onClick={() => removeProductFromCart(authUser.email, entry.product.id)}
+                          onClick={() => void removeProductFromCart(authUser.email, entry.product.id)}
                           className="rounded-full border border-zinc-200 px-2.5 py-1 text-xs font-semibold text-zinc-600 transition-colors hover:border-rose-300 hover:text-rose-600"
                         >
                           {t.remove}
@@ -292,9 +330,16 @@ export function PetshopHeader({
                     <span className="font-medium text-zinc-600">{t.subtotal}</span>
                     <span className="text-base font-bold text-zinc-900">{formatter.format(subtotal)}</span>
                   </div>
+                  <Link
+                    href={profileCartHref}
+                    onClick={() => setIsCartOpen(false)}
+                    className="block w-full rounded-full bg-emerald-500 px-4 py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-emerald-600"
+                  >
+                    {t.placeOrder}
+                  </Link>
                   <button
                     type="button"
-                    onClick={() => clearCartForUser(authUser.email)}
+                    onClick={() => void clearCartForUser(authUser.email)}
                     className="w-full rounded-full border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-700 transition-colors hover:border-emerald-300 hover:text-emerald-700"
                   >
                     {t.clear}

@@ -1,92 +1,184 @@
 "use client";
 
+import { clearAuthUser } from "@/lib/auth-client";
+
 export type CartItem = {
   productId: number;
   quantity: number;
 };
 
-const CART_STORAGE_PREFIX = "patishop_cart_";
 export const CART_CHANGE_EVENT = "patishop-cart-change";
 const EMPTY_CART: CartItem[] = [];
-const cartSnapshotCache = new Map<string, { raw: string | null; parsed: CartItem[] }>();
+const cartSnapshotCache = new Map<string, CartItem[]>();
 
-function getCartStorageKey(email: string) {
-  const normalized = email.trim().toLowerCase();
-  return `${CART_STORAGE_PREFIX}${normalized}`;
-}
+type CartMutationResult =
+  | { ok: true; items: CartItem[] }
+  | { ok: false; error: string };
 
-function parseCart(raw: string | null): CartItem[] {
-  if (!raw) return [];
-
-  try {
-    const parsed = JSON.parse(raw) as CartItem[];
-    if (!Array.isArray(parsed)) return [];
-
-    return parsed.filter(
-      (item) => item && Number.isInteger(item.productId) && Number.isInteger(item.quantity) && item.quantity > 0,
-    );
-  } catch {
-    return [];
-  }
+function normalizeEmail(email: string) {
+  return email.trim().toLowerCase();
 }
 
 export function getCartItemsForUser(email?: string) {
-  if (typeof window === "undefined" || !email) return EMPTY_CART;
-  const key = getCartStorageKey(email);
-  return parseCart(window.localStorage.getItem(key));
+  if (!email) return EMPTY_CART;
+  return cartSnapshotCache.get(normalizeEmail(email)) ?? EMPTY_CART;
 }
 
 export function getCartItemsSnapshotForUser(email?: string) {
-  if (typeof window === "undefined" || !email) return EMPTY_CART;
-
-  const key = getCartStorageKey(email);
-  const raw = window.localStorage.getItem(key);
-  const cached = cartSnapshotCache.get(key);
-
-  if (cached && cached.raw === raw) {
-    return cached.parsed;
-  }
-
-  const parsed = parseCart(raw);
-  cartSnapshotCache.set(key, { raw, parsed });
-  return parsed;
+  if (!email) return EMPTY_CART;
+  return cartSnapshotCache.get(normalizeEmail(email)) ?? EMPTY_CART;
 }
 
 function setCartItemsForUser(email: string, items: CartItem[]) {
   if (typeof window === "undefined") return;
-  const key = getCartStorageKey(email);
-  window.localStorage.setItem(key, JSON.stringify(items));
+  cartSnapshotCache.set(normalizeEmail(email), items);
   window.dispatchEvent(new Event(CART_CHANGE_EVENT));
 }
 
-export function addProductToCart(email: string, productId: number, quantity = 1) {
-  if (!email || quantity <= 0) return;
+function normalizeItems(items: unknown): CartItem[] {
+  if (!Array.isArray(items)) return [];
 
-  const items = getCartItemsForUser(email);
-  const existingIndex = items.findIndex((item) => item.productId === productId);
+  return items.filter(
+    (item): item is CartItem =>
+      Boolean(
+        item &&
+          typeof item === "object" &&
+          Number.isInteger((item as CartItem).productId) &&
+          Number.isInteger((item as CartItem).quantity) &&
+          (item as CartItem).quantity > 0,
+      ),
+  );
+}
 
-  if (existingIndex >= 0) {
-    const next = [...items];
-    next[existingIndex] = {
-      ...next[existingIndex],
-      quantity: next[existingIndex].quantity + quantity,
+async function parseCartResponse(response: Response): Promise<CartMutationResult> {
+  const payload = (await response.json().catch(() => null)) as
+    | { ok?: boolean; items?: CartItem[]; error?: string }
+    | null;
+
+  if (!response.ok || !payload?.ok) {
+    return {
+      ok: false,
+      error: payload?.error ?? "UNKNOWN_ERROR",
     };
-    setCartItemsForUser(email, next);
-    return;
   }
 
-  setCartItemsForUser(email, [...items, { productId, quantity }]);
+  return {
+    ok: true,
+    items: normalizeItems(payload.items),
+  };
 }
 
-export function removeProductFromCart(email: string, productId: number) {
-  if (!email) return;
-  const items = getCartItemsForUser(email).filter((item) => item.productId !== productId);
-  setCartItemsForUser(email, items);
+export async function loadCartForUser(email?: string) {
+  if (!email || typeof window === "undefined") return;
+
+  const normalizedEmail = normalizeEmail(email);
+  try {
+    const response = await fetch("/api/cart", {
+      cache: "no-store",
+    });
+    if (response.status === 401) {
+      clearAuthUser();
+      setCartItemsForUser(normalizedEmail, []);
+      return;
+    }
+    const payload = (await response.json().catch(() => null)) as
+      | { ok?: boolean; items?: CartItem[] }
+      | null;
+
+    if (!response.ok || !payload?.ok) {
+      setCartItemsForUser(normalizedEmail, []);
+      return;
+    }
+
+    setCartItemsForUser(normalizedEmail, normalizeItems(payload.items));
+  } catch {
+    // no-op
+  }
 }
 
-export function clearCartForUser(email: string) {
+export async function addProductToCart(email: string, productId: number, quantity = 1) {
+  if (!email || quantity <= 0) {
+    return { ok: false, error: "INVALID_INPUT" } as const;
+  }
+
+  try {
+    const response = await fetch("/api/cart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        productId,
+        quantity,
+      }),
+    });
+
+    const result = await parseCartResponse(response);
+    if (!result.ok && result.error === "UNAUTHORIZED") {
+      clearAuthUser();
+      setCartItemsForUser(email, []);
+      return result;
+    }
+    if (result.ok) {
+      setCartItemsForUser(email, result.items);
+    }
+    return result;
+  } catch {
+    return { ok: false, error: "NETWORK_ERROR" } as const;
+  }
+}
+
+export async function removeProductFromCart(email: string, productId: number) {
   if (!email) return;
-  setCartItemsForUser(email, []);
+
+  try {
+    const response = await fetch("/api/cart", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        productId,
+      }),
+    });
+
+    const result = await parseCartResponse(response);
+    if (!result.ok && result.error === "UNAUTHORIZED") {
+      clearAuthUser();
+      setCartItemsForUser(email, []);
+      return;
+    }
+    if (result.ok) {
+      setCartItemsForUser(email, result.items);
+    }
+  } catch {
+    // no-op
+  }
+}
+
+export async function clearCartForUser(email: string) {
+  if (!email) return;
+
+  try {
+    const response = await fetch("/api/cart", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result = await parseCartResponse(response);
+    if (!result.ok && result.error === "UNAUTHORIZED") {
+      clearAuthUser();
+      setCartItemsForUser(email, []);
+      return;
+    }
+    if (result.ok) {
+      setCartItemsForUser(email, result.items);
+    }
+  } catch {
+    // no-op
+  }
 }
 
 export function getCartItemCountForUser(email?: string) {

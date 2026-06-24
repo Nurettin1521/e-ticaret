@@ -3,6 +3,7 @@
 export type AuthUser = {
   name: string;
   email: string;
+  isAdmin?: boolean;
 };
 
 export const AUTH_USER_STORAGE_KEY = "patishop_auth_user";
@@ -21,6 +22,7 @@ function parseAuthUser(raw: string | null): AuthUser | null {
     return {
       name: parsed.name,
       email: parsed.email,
+      isAdmin: Boolean(parsed.isAdmin),
     };
   } catch {
     return null;
@@ -65,7 +67,10 @@ export function setAuthUser(user: AuthUser) {
   const email = user.email.trim().toLowerCase();
   if (!name || !email) return;
 
-  window.localStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify({ name, email }));
+  window.localStorage.setItem(
+    AUTH_USER_STORAGE_KEY,
+    JSON.stringify({ name, email, isAdmin: Boolean(user.isAdmin) }),
+  );
   window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
 }
 
@@ -74,4 +79,47 @@ export function clearAuthUser() {
 
   window.localStorage.removeItem(AUTH_USER_STORAGE_KEY);
   window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
+}
+
+export async function hydrateAuthUserFromSession() {
+  if (typeof window === "undefined") return;
+
+  try {
+    const response = await fetch("/api/auth/me", { cache: "no-store" });
+    if (!response.ok) {
+      clearAuthUser();
+      return;
+    }
+
+    const payload = (await response.json().catch(() => null)) as
+      | { ok?: boolean; user?: { name?: string; email?: string; isAdmin?: boolean } }
+      | null;
+
+    if (!payload?.ok || !payload.user?.name || !payload.user?.email) {
+      clearAuthUser();
+      return;
+    }
+
+    setAuthUser({
+      name: payload.user.name,
+      email: payload.user.email,
+      isAdmin: Boolean(payload.user.isAdmin),
+    });
+  } catch {
+    // no-op
+  }
+}
+
+export async function logoutAuthUser() {
+  if (typeof window === "undefined") return;
+
+  try {
+    await fetch("/api/logout", {
+      method: "POST",
+    });
+  } catch {
+    // no-op
+  } finally {
+    clearAuthUser();
+  }
 }

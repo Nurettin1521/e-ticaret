@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { LoginClient } from "@/app/login/login-client";
+import { ProfileClient } from "@/app/profile/profile-client";
 
 export const metadata: Metadata = {
   robots: {
@@ -9,10 +9,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function LoginPage() {
+export default function ProfilePage() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-[#f7faf8]" />}>
-      <LoginClient />
+      <ProfileClient />
     </Suspense>
   );
 }

@@ -395,7 +395,6 @@ export function ProductCatalog({ language }: ProductCatalogProps) {
                         <div className="flex items-end justify-between gap-3">
                           <div>
                             <p className="text-lg font-bold text-emerald-700">{formatter.format(product.price)}</p>
-                            <p className="text-xs text-zinc-400 line-through">{formatter.format(product.compareAtPrice)}</p>
                           </div>
                           <div className="text-right text-xs text-zinc-500">
                             <p>

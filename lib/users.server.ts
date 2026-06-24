@@ -3,8 +3,10 @@ import "server-only";
 import { prisma } from "@/lib/db";
 
 export type AuthenticatedUser = {
+  id: number;
   name: string;
   email: string;
+  isAdmin: boolean;
 };
 
 export async function findUserByCredentials(email: string, password: string) {
@@ -18,7 +20,9 @@ export async function findUserByCredentials(email: string, password: string) {
   if (user.passwordHash !== password) return null;
 
   return {
+    id: user.id,
     name: user.name,
     email: user.email,
+    isAdmin: user.isAdmin,
   } satisfies AuthenticatedUser;
 }

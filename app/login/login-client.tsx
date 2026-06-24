@@ -11,20 +11,26 @@ const content = {
   tr: {
     title: "Hesabina Giris Yap",
     subtitle: "Sepet ve siparis adimlari icin giris yapabilirsin.",
+    customerLogin: "Musteri Girisi",
+    adminLogin: "Admin Girisi",
     email: "E-posta",
     password: "Sifre",
     submit: "Giris Yap",
     helper: "Bu ekran simdilik mock giris ekranidir.",
     invalidCredentials: "Yanlis girdiniz bilgileri.",
+    adminRequired: "Bu hesap admin degil.",
   },
   en: {
     title: "Sign In",
     subtitle: "Sign in to continue with cart and order steps.",
+    customerLogin: "Customer Login",
+    adminLogin: "Admin Login",
     email: "Email",
     password: "Password",
     submit: "Sign In",
     helper: "This is currently a mock login screen.",
     invalidCredentials: "The credentials you entered are incorrect.",
+    adminRequired: "This account is not an admin.",
   },
 };
 
@@ -41,6 +47,9 @@ export function LoginClient() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [loginType, setLoginType] = useState<"customer" | "admin">(
+    searchParams.get("mode") === "admin" ? "admin" : "customer",
+  );
 
   useEffect(() => {
     document.documentElement.lang = language === "tr" ? "tr" : "en";
@@ -58,6 +67,7 @@ export function LoginClient() {
     const params = new URLSearchParams(searchParams.toString());
     params.set("lang", nextLanguage);
     params.set("returnTo", safeReturnTo);
+    params.set("mode", loginType);
     router.replace(`${pathname}?${params.toString()}`);
   };
 
@@ -72,7 +82,7 @@ export function LoginClient() {
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, loginType }),
       });
     } catch {
       setErrorMessage(t.invalidCredentials);
@@ -80,13 +90,17 @@ export function LoginClient() {
     }
 
     if (!response.ok) {
-      setErrorMessage(t.invalidCredentials);
+      if (response.status === 403 && loginType === "admin") {
+        setErrorMessage(t.adminRequired);
+      } else {
+        setErrorMessage(t.invalidCredentials);
+      }
       return;
     }
 
     const data = (await response.json()) as {
       ok: boolean;
-      user?: { name: string; email: string };
+      user?: { name: string; email: string; isAdmin?: boolean };
     };
 
     if (!data.ok || !data.user) {
@@ -95,7 +109,11 @@ export function LoginClient() {
     }
 
     setErrorMessage("");
-    setAuthUser({ name: data.user.name, email: data.user.email });
+    setAuthUser({ name: data.user.name, email: data.user.email, isAdmin: Boolean(data.user.isAdmin) });
+    if (loginType === "admin") {
+      router.push(`/admin?lang=${language}`);
+      return;
+    }
     router.push(safeReturnTo);
   };
 
@@ -115,6 +133,33 @@ export function LoginClient() {
           <h1 className="text-2xl font-semibold text-zinc-900">{t.title}</h1>
           <p className="mt-2 text-sm text-zinc-500">{t.subtitle}</p>
 
+          <div className="mt-5 grid grid-cols-2 gap-2 rounded-2xl border border-zinc-200 bg-zinc-50 p-1">
+            <button
+              type="button"
+              onClick={() => {
+                setLoginType("customer");
+                if (errorMessage) setErrorMessage("");
+              }}
+              className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
+                loginType === "customer" ? "bg-white text-zinc-900 shadow-sm" : "text-zinc-600 hover:text-zinc-800"
+              }`}
+            >
+              {t.customerLogin}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setLoginType("admin");
+                if (errorMessage) setErrorMessage("");
+              }}
+              className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
+                loginType === "admin" ? "bg-white text-zinc-900 shadow-sm" : "text-zinc-600 hover:text-zinc-800"
+              }`}
+            >
+              {t.adminLogin}
+            </button>
+          </div>
+
           <form onSubmit={onSubmit} className="mt-6 space-y-4">
             <div>
               <label htmlFor="email" className="mb-1 block text-sm font-medium text-zinc-700">
@@ -129,7 +174,7 @@ export function LoginClient() {
                   if (errorMessage) setErrorMessage("");
                 }}
                 required
-                className="w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm outline-none transition-colors focus:border-emerald-400"
+                className="w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900 outline-none transition-colors focus:border-emerald-400"
                 placeholder="ornek@mail.com"
               />
             </div>
@@ -147,7 +192,7 @@ export function LoginClient() {
                   if (errorMessage) setErrorMessage("");
                 }}
                 required
-                className="w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm outline-none transition-colors focus:border-emerald-400"
+                className="w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900 outline-none transition-colors focus:border-emerald-400"
                 placeholder="••••••••"
               />
             </div>

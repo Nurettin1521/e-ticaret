@@ -12,7 +12,7 @@ type AddToCartButtonProps = {
 };
 
 export function AddToCartButton({ language, productId, label, className }: AddToCartButtonProps) {
-  const onAddToCart = () => {
+  const onAddToCart = async () => {
     const user = getAuthUserSnapshot();
 
     if (!user?.email) {
@@ -20,11 +20,28 @@ export function AddToCartButton({ language, productId, label, className }: AddTo
       return;
     }
 
-    addProductToCart(user.email, productId, 1);
+    const result = await addProductToCart(user.email, productId, 1);
+    if (!result.ok) {
+      if (result.error === "UNAUTHORIZED") {
+        window.alert(language === "tr" ? "Lutfen yeniden giris yapin." : "Please sign in again.");
+        return;
+      }
+
+      if (result.error === "INSUFFICIENT_STOCK") {
+        window.alert(
+          language === "tr"
+            ? "Bu urunden stokta kaldigindan fazla ekleyemezsin."
+            : "You cannot add more than the available stock for this product.",
+        );
+        return;
+      }
+
+      window.alert(language === "tr" ? "Sepet guncellenemedi." : "Cart could not be updated.");
+    }
   };
 
   return (
-    <button type="button" onClick={onAddToCart} className={className}>
+    <button type="button" onClick={() => void onAddToCart()} className={className}>
       {label}
     </button>
   );

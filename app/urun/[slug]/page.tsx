@@ -39,7 +39,6 @@ const content = {
     stock: "Stok",
     rating: "Puan",
     reviews: "yorum",
-    oldPrice: "Eski fiyat",
     inspect: "Incele",
     addToCart: "Sepete Ekle",
   },
@@ -51,7 +50,6 @@ const content = {
     stock: "Stock",
     rating: "Rating",
     reviews: "reviews",
-    oldPrice: "Old price",
     inspect: "View",
     addToCart: "Add to Cart",
   },
@@ -73,18 +71,23 @@ export async function generateMetadata({ params, searchParams }: ProductDetailPa
 
   const title = `${product.name[language]} | ${siteConfig.name}`;
   const description = product.shortDescription[language];
-  const path = `/urun/${product.slug}?lang=${language}`;
+  const canonicalPath = language === "en" ? `/urun/${product.slug}?lang=en` : `/urun/${product.slug}`;
 
   return {
     title,
     description,
     alternates: {
-      canonical: path,
+      canonical: canonicalPath,
+      languages: {
+        "tr-TR": `/urun/${product.slug}`,
+        en: `/urun/${product.slug}?lang=en`,
+        "x-default": `/urun/${product.slug}`,
+      },
     },
     openGraph: {
       title,
       description,
-      url: path,
+      url: canonicalPath,
       type: "website",
       siteName: siteConfig.name,
     },
@@ -175,9 +178,6 @@ export default async function ProductDetailPage({ params, searchParams }: Produc
 
                 <div className="flex flex-wrap items-end gap-3">
                   <p className="text-3xl font-bold text-emerald-700">{priceFormatter.format(product.price)}</p>
-                  <p className="text-sm text-zinc-500 line-through">
-                    {t.oldPrice}: {priceFormatter.format(product.compareAtPrice)}
-                  </p>
                 </div>
 
                 <div className="grid gap-3 text-sm text-zinc-600 sm:grid-cols-3">
